@@ -53,11 +53,11 @@ button {
   display: inline-block;
   width: 400px;
   height: 300px;
-  margin: 0 auto;
+  margin: 20px;
   position: relative;
-  border: 5px solid black;
+  border: 3px solid black;
   border-radius: 10px;
-  box-shadow: 0 5px 50px #333;
+  box-shadow: 0 5px 50px rgb(63, 63, 63);
 }
 
 #gameCanvas {

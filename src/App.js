@@ -39,6 +39,8 @@ function App() {
   const [imgSrc, setImgSrc] = useState(null);
   const cxtRef = useRef();
 
+  const [faceCount, setFaceCount] = useState(0);
+
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
@@ -64,6 +66,8 @@ function App() {
 
           const cxt = cxtRef.current.getContext("2d");
 
+          setFaceCount(detections.length);
+
           drawFaceContainer(cxt, detections);
         }
       })();
@@ -77,7 +81,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        WEBCAM CAPTURE
+        <div className="counter">
+          Faces: {faceCount}
+        </div>
         <div id="container">
           <Webcam
             id="cam"
@@ -96,7 +102,9 @@ function App() {
             height={height.toString()}
           ></canvas>
         </div>
-        <button onClick={capture}>Capture photo</button>
+        <button onClick={capture} disabled={!faceCount}>
+          Capture photo
+        </button>
         {imgSrc && <img alt="img" src={imgSrc} />}
       </header>
     </div>
