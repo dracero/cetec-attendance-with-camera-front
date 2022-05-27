@@ -102,7 +102,7 @@ function App() {
             height={height.toString()}
           ></canvas>
         </div>
-        <button onClick={capture} disabled={!faceCount}>
+        <button onClick={capture} disabled={faceCount !== 1}>
           Capture photo
         </button>
         {imgSrc && <img alt="img" src={imgSrc} />}
