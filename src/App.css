@@ -38,8 +38,29 @@
 }
 
 img,
-video,
 button {
   display: block;
   padding: 20px;
+}
+
+#cam {
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+}
+
+#container {
+  display: inline-block;
+  width: 400px;
+  height: 300px;
+  margin: 0 auto;
+  position: relative;
+  border: 5px solid black;
+  border-radius: 10px;
+  box-shadow: 0 5px 50px #333;
+}
+
+#gameCanvas {
+  position: relative;
+  z-index: 20;
 }

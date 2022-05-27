@@ -1,36 +1,43 @@
 // import logo from './logo.svg';
 import './App.css';
 
-import { React, useEffect, useRef, useState, useCallback } from 'react';
+import { React, useEffect, useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 
-import '@tensorflow/tfjs-core';
-import '@tensorflow/tfjs-backend-cpu';
+import "@tensorflow/tfjs-core";
+import "@tensorflow/tfjs-backend-cpu";
 
-import * as blazeface from '@tensorflow-models/blazeface';
+import * as blazeface from "@tensorflow-models/blazeface";
+
+const width = 400;
+const height = 300;
 
 const drawFaceContainer = (ctx, detections) => {
-
   detections.forEach((detection) => {
-    // do the magic
     const { topLeft, bottomRight } = detection;
-    const size = [bottomRight[0] - topLeft[0], bottomRight[1] - topLeft[1]];
-    // Draw a circle around the face of each person
-    ctx.beginPath();
-    const x = bottomRight[0] - bottomRight[0] * 0.25;
-    const y = topLeft[1] + topLeft[1] * 0.3;
-    const radius = size[0] * 0.6;
-    ctx.lineWidth = "3";
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = "green";
-    ctx.stroke();
+    const start = topLeft;
+    const end = bottomRight;
+    const size = [end[0] - start[0], end[1] - start[1]];
+    ctx.fillStyle = "rgba(255, 0, 0, 0.5)";
+    ctx.fillRect(start[0], start[1], size[0], size[1]);
+
+    if (true) {
+      const landmarks = detection.landmarks;
+
+      ctx.fillStyle = "blue";
+      for (let j = 0; j < landmarks.length; j++) {
+        const x = landmarks[j][0];
+        const y = landmarks[j][1];
+        ctx.fillRect(x, y, 5, 5);
+      }
+    }
   });
 };
 
 function App() {
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
-  const cxtRef = useRef({current: {width: 256, height: 144}});
+  const cxtRef = useRef();
 
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -71,18 +78,26 @@ function App() {
     <div className="App">
       <header className="App-header">
         WEBCAM CAPTURE
-        <Webcam
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-          width={256}
-          height={144}
-        />
-        <canvas className="app__canvas" ref={cxtRef}></canvas>
+        <div id="container">
+          <Webcam
+            id="cam"
+            ref={webcamRef}
+            audio={true}
+            screenshotFormat="image/jpeg"
+            videoConstraints={{
+              height: height,
+              width: width
+            }}
+          />
+          <canvas
+            id="gameCanvas"
+            ref={cxtRef}
+            width={width.toString()}
+            height={height.toString()}
+          ></canvas>
+        </div>
         <button onClick={capture}>Capture photo</button>
-        {imgSrc && (
-          <img alt="img" src={imgSrc}/>
-        )}
+        {imgSrc && <img alt="img" src={imgSrc} />}
       </header>
     </div>
   );
