@@ -9,6 +9,8 @@ import "@tensorflow/tfjs-backend-cpu";
 
 import * as blazeface from "@tensorflow-models/blazeface";
 
+import logo from './logo.svg';
+
 const width = 400;
 const height = 300;
 
@@ -81,6 +83,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <img src={logo} alt="Logo FIUBA" className="logo-img" />  
         <div className="counter">
           Faces: {faceCount}
         </div>
