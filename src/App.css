@@ -65,7 +65,7 @@ button {
   z-index: 20;
 }
 
-.logo-img{
+.logo-img {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -73,4 +73,13 @@ button {
   margin-bottom: 20px;
   padding: 20px;
   width: 10%;
+}
+
+#dropdown {
+  align-items: left;
+}
+
+.camera-container {
+
+  align-items: center;
 }

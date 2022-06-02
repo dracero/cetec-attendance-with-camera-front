@@ -2,7 +2,9 @@
 import './App.css';
 
 import { React, useEffect, useRef, useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import Webcam from "react-webcam";
+import Courses from './courses';
 
 import "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-cpu";
@@ -40,8 +42,8 @@ function App() {
   const webcamRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
   const cxtRef = useRef();
-
   const [faceCount, setFaceCount] = useState(0);
+  const course = useSelector((store) => store.course.course);
 
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -83,32 +85,42 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} alt="Logo FIUBA" className="logo-img" />  
-        <div className="counter">
-          Faces: {faceCount}
-        </div>
-        <div id="container">
-          <Webcam
-            id="cam"
-            ref={webcamRef}
-            audio={false}
-            screenshotFormat="image/jpeg"
-            videoConstraints={{
-              height: height,
-              width: width
-            }}
-          />
-          <canvas
-            id="gameCanvas"
-            ref={cxtRef}
-            width={width.toString()}
-            height={height.toString()}
-          ></canvas>
-        </div>
-        <button onClick={capture} disabled={faceCount !== 1}>
-          Capture photo
-        </button>
-        {imgSrc && <img alt="img" src={imgSrc} />}
+        <img src={logo} alt="Logo FIUBA" className="logo-img" />
+        <Courses />
+        
+        { course !== '' &&
+          <>
+            <div id="camera-container">
+              <div className="counter">
+                Faces: {faceCount}
+              </div>
+              <div id="container">
+                <Webcam
+                  id="cam"
+                  ref={webcamRef}
+                  audio={false}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    height: height,
+                    width: width
+                  }}
+                />
+                <canvas
+                  id="gameCanvas"
+                  ref={cxtRef}
+                  width={width.toString()}
+                  height={height.toString()}
+                ></canvas>
+              </div>
+            </div>
+
+            <button onClick={capture} disabled={faceCount !== 1}>
+              Capture photo
+            </button>
+            {imgSrc && <img alt="img" src={imgSrc} />}
+          </>
+        }
+        
       </header>
     </div>
   );
