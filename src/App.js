@@ -48,7 +48,14 @@ function App() {
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImgSrc(imageSrc);
-  }, [webcamRef, setImgSrc]);
+
+    const data = {
+      image: imageSrc,
+      date: new Date(),
+      course: course
+    }
+    console.log(data);
+  }, [webcamRef, setImgSrc, course]);
 
   useEffect(() => {
     const timerIntervalId = setInterval(() => {
