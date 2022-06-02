@@ -82,7 +82,7 @@ function App() {
           <Webcam
             id="cam"
             ref={webcamRef}
-            audio={true}
+            audio={false}
             screenshotFormat="image/jpeg"
             videoConstraints={{
               height: height,
