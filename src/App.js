@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import Webcam from "react-webcam";
 import Courses from './courses';
 
+import axios from "axios";
+
 import "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-cpu";
 
@@ -52,9 +54,20 @@ function App() {
     const data = {
       image: imageSrc,
       date: new Date(),
-      course: course
+      course: course,
+      email:"mail123@test.com"
     }
     console.log(data);
+
+    axios
+      .post("http://localhost:8081/student", null, { params: data })
+      .then(returnedUser => {
+        console.log("EXITO");
+      })
+      .catch(error => {
+        console.log("ERROR");
+      })
+
   }, [webcamRef, setImgSrc, course]);
 
   useEffect(() => {
