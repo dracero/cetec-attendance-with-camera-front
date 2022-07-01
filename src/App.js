@@ -55,18 +55,29 @@ function App() {
       image: imageSrc,
       date: new Date(),
       course: course,
-      email:"mail123@test.com"
+      email:"mail77@test.com"
     }
-    console.log(data);
 
-    axios
-      .post("http://localhost:8081/student", null, { params: data })
-      .then(returnedUser => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('image', data.image);
+    bodyFormData.append('date', data.date);
+    bodyFormData.append('course', data.course);
+    bodyFormData.append('email', data.email);
+
+    axios({
+      method: "post",
+      url: "http://localhost:8081/student",
+      data: bodyFormData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        //handle success
         console.log("EXITO");
       })
-      .catch(error => {
+      .catch(function (response) {
+        //handle error
         console.log("ERROR");
-      })
+      });
 
   }, [webcamRef, setImgSrc, course]);
 
