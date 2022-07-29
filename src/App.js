@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import Webcam from "react-webcam";
 import Courses from './courses';
 
+import Alert from "@mui/material/Alert";
+
 import axios from "axios";
 
 import "@tensorflow/tfjs-core";
@@ -42,27 +44,25 @@ const drawFaceContainer = (ctx, detections) => {
 
 function App() {
   const webcamRef = useRef(null);
-  const [imgSrc, setImgSrc] = useState(null);
   const cxtRef = useRef();
   const [faceCount, setFaceCount] = useState(0);
   const course = useSelector((store) => store.course.course);
 
+  const [uploadStatus, setUploadStatus] = useState("Neutral");
+
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setImgSrc(imageSrc);
 
     const data = {
       image: imageSrc,
       date: new Date(),
-      course: course,
-      email:"mail77@test.com"
+      course: course
     }
 
     var bodyFormData = new FormData();
     bodyFormData.append('image', data.image);
     bodyFormData.append('date', data.date);
     bodyFormData.append('course', data.course);
-    bodyFormData.append('email', data.email);
 
     axios({
       method: "post",
@@ -74,13 +74,16 @@ function App() {
       .then(function (response) {
         //handle success
         console.log("EXITO");
+        setUploadStatus("Success");
       })
       .catch(function (response) {
         //handle error
         console.log("ERROR");
+        setUploadStatus("Error");
+
       });
 
-  }, [webcamRef, setImgSrc, course]);
+  }, [webcamRef, course]);
 
   useEffect(() => {
     const timerIntervalId = setInterval(() => {
@@ -117,37 +120,53 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <img src={logo} alt="Logo FIUBA" className="logo-img" />
-        WEBCAM CAPTURE
-        <Courses />
-        { course !== '' &&
+        <img src={logo} alt="Logo FIUBA" className="logo-img" />
+        { uploadStatus === "Success" &&
+          <div>
+            <Alert variant="outlined" severity="success">
+              Imagen actualizada exitosamente.
+            </Alert>
+        </div>
+        }
+        { uploadStatus !== "Success" &&
           <>
-            <div className="counter">
-              Faces: {faceCount}
-            </div>
-            <div id="container">
-              <Webcam
-                id="cam"
-                ref={webcamRef}
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{
-                  height: height,
-                  width: width
-                }}
-              />
-              <canvas
-                id="gameCanvas"
-                ref={cxtRef}
-                width={width.toString()}
-                height={height.toString()}
-              ></canvas>
-            </div>
-            <button onClick={capture} disabled={faceCount !== 1}>
-              Capture photo
-            </button>
-            {imgSrc && <img alt="img" src={imgSrc} />}
+            <Courses />
+            { course !== '' &&
+              <>
+                <div className="counter">
+                  Faces: {faceCount}
+                </div>
+                <div id="container">
+                  <Webcam
+                    id="cam"
+                    ref={webcamRef}
+                    audio={false}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={{
+                      height: height,
+                      width: width
+                    }}
+                  />
+                  <canvas
+                    id="gameCanvas"
+                    ref={cxtRef}
+                    width={width.toString()}
+                    height={height.toString()}
+                  ></canvas>
+                </div>
+                <button onClick={capture} disabled={faceCount !== 1}>
+                  Capture photo
+                </button>
+              </>
+            }
           </>
+        }
+        { uploadStatus === "Error" &&
+          <div>
+            <Alert variant="outlined" severity="error">
+              Error
+            </Alert>
+          </div>
         }
       </header>
     </div>
