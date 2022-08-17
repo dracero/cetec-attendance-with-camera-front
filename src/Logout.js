@@ -5,7 +5,7 @@ import './App.css';
 const Logout = () => {
   return(
     <Box m={0} pt={0} className="right">
-      <Button href="http://localhost:8080/logout" variant="outlined" >Logout</Button>
+      <Button href={process.env.REACT_APP_URL + "/logout"} variant="outlined" >Logout</Button>
     </Box>
   )
 };

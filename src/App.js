@@ -7,6 +7,7 @@ import Webcam from "react-webcam";
 import Courses from './courses';
 
 import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
 
 import axios from "axios";
 
@@ -66,19 +67,17 @@ function App() {
 
     axios({
       method: "post",
-      url: "http://localhost:8080/student",
+      url: process.env.REACT_APP_URL + "/student",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true
     })
       .then(function (response) {
         //handle success
-        console.log("EXITO");
         setUploadStatus("Success");
       })
       .catch(function (response) {
         //handle error
-        console.log("ERROR");
         setUploadStatus("Error");
 
       });
@@ -133,9 +132,6 @@ function App() {
             <Courses />
             { course !== '' &&
               <>
-                <div className="counter">
-                  Faces: {faceCount}
-                </div>
                 <div id="container">
                   <Webcam
                     id="cam"
@@ -154,9 +150,9 @@ function App() {
                     height={height.toString()}
                   ></canvas>
                 </div>
-                <button onClick={capture} disabled={faceCount !== 1}>
+                <Button onClick={capture} variant="contained" disabled={faceCount !== 1}>
                   Capture photo
-                </button>
+                </Button>
               </>
             }
           </>
